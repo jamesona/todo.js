@@ -13,8 +13,8 @@ todo.js has no library dependencies, and can be directly implemented in your pro
 
 Implementation
 -------
-todo.js must be included in the page, by any normal means.
-(ex. ```<script src="./pathtolibrary/todo.js"></script>```)
+todo.js must be included in the page, by any normal means.<br />
+(ex. ```<script src="./pathtolibrary/todo.js"></script>```)<br />
 The task-list table is automatically created, and only requires an appropriately classed table tag.
 
 ```<table class="todo"></table>```
