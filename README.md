@@ -1,4 +1,4 @@
-todo.js -- a standalone to-do list module
+todo.js — a standalone to-do list module
 =======
 todo.js is a quick mock-up, and my first attempt at OOP style architecture, particularly with JavaScript.
 It's a little rough around the edges, and may be refined at the request of others, or if I find I have the time and desire to do so.
