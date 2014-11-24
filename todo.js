@@ -24,8 +24,6 @@ var ToDo = function() {
   //import or set tasks
   this.loadTasks(tableBody);
 
-
-
   //Create button for removing completed
   var removeComplete = document.createElement('button');
   removeComplete.innerHTML = 'Remove Completed';
