@@ -10,6 +10,7 @@ Requirements
 -------
 None!<br />
 todo.js has no library dependencies, and can be directly implemented in your project.
+List data is kept in browser storage, like a cookie, and does not need to be managed by your application.
 
 Implementation
 -------
