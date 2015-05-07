@@ -1,12 +1,12 @@
 //ToDo class definition===================================================
 var ToDo = function() {
   //Find dom anchor, and initialize table
-  var todo = this;
+  var todo = this,
       table = document.getElementsByClassName('todo')[0],
       tableHead = document.createElement('thead'),
       header = tableHead.insertRow(0),
       tableBody = document.createElement('tbody'),
-      tableFoot = document.createElement('tfoot')
+      tableFoot = document.createElement('tfoot'),
       footer = tableFoot.insertRow(0),
       add = document.createElement('button'),
       download = document.createElement('button');
@@ -49,7 +49,7 @@ var ToDo = function() {
 
   table.appendChild(tableBody);
   console.log('to-do initialized');
-}
+};
 
 //ToDo Methods-----------------------------------------------------------------
 ToDo.prototype.addTask = function(todo, tableBody, data) {
@@ -59,10 +59,10 @@ ToDo.prototype.addTask = function(todo, tableBody, data) {
     console.log('added '+task.uuid+' to table');
     todo.renderTask(tableBody, task);
     todo.saveTasks();
-  }
-  //map vars if data object supplied
+  };
+  var task; //map vars if data object supplied
   if (data !== null && typeof data === 'object') {
-    var task = {};
+    task = {};
     task.uuid = data.uuid;
     task.name = data.name;
     task.time = data.time;
@@ -70,17 +70,17 @@ ToDo.prototype.addTask = function(todo, tableBody, data) {
     task.complete = data.complete;
     append(task);
   } else {
-    var task = new Task();
+    task = new Task();
     task.modal(task, function(){
       append(task);
     });
   }
-}
+};
 
 ToDo.prototype.saveTasks = function() {
   localStorage.setItem('todoTasks', JSON.stringify(this.tasks));
   console.log('tasks saved to localstorage');
-}
+};
 
 ToDo.prototype.loadTasks = function(tableBody) {
   tableBody.innerHTML = '';
@@ -89,7 +89,7 @@ ToDo.prototype.loadTasks = function(tableBody) {
     console.log('loading tasks from localStorage');
     this.tasks = storage;
     var tasks = this.tasks;
-    console.log('tasks loaded: ', tasks)
+    console.log('tasks loaded: ', tasks);
     for (var task in this.tasks) {
       if (tasks.hasOwnProperty(task)) {
         this.addTask(this, tableBody, tasks[task]);
@@ -103,16 +103,12 @@ ToDo.prototype.loadTasks = function(tableBody) {
     console.log('no tasks in browser storage');
     this.tasks = {};
   }
-}
+};
 
 ToDo.prototype.renderTask = function(tableBody, task) {
-  var row = document.createElement('tr'),
-      time = new Date(Date.parse(task.time) + (new Date().getTimezoneOffset()*60000)),
-      date = time.toString().substring(0, 16),
-      hour = time.toString().substring(17,18),
-      minute = time.toString().substring(19,21);
-  if (hour > 12) {hour -= 12; var half = ' AM'} else var half = ' PM';
-  time = date+hour+':'+minute+half;
+  var row = document.createElement('tr'), check,
+      timeParse = new Date(task.time),
+      time = timeParse.toDateString()+' '+timeParse.toLocaleTimeString();
   row.innerHTML = '<td></td>'+
                   '<td>'+task.name+'</td>'+
                   '<td><i>'+task.desc+'</i></td>'+
@@ -137,8 +133,8 @@ ToDo.prototype.renderTask = function(tableBody, task) {
       row.className = '';
     }
     todo.saveTasks();
-  })
-}
+  });
+};
 
 //Task class definition===================================================
 var Task = function() {
@@ -147,9 +143,26 @@ var Task = function() {
   this.time = '';
   this.desc = '';
   this.complete = 0;
-}
+};
 
 //Task methods------------------------------------------------------------
+Task.prototype.toDateTime = function(date) {
+    var str = '';
+    var year, month, day, hour, min;
+    year = date.getUTCFullYear();
+    month = date.getUTCMonth() + 1;
+    month = month < 10 ? '0' + month : month;
+    day = date.getUTCDate();
+    day = day < 10 ? '0' + day : day;
+    hour = date.getUTCHours();
+    hour = hour < 10 ? '0' + hour : hour;
+    min = date.getUTCMinutes();
+    min = min < 10 ? '0' + min : min;
+    
+    str += year + '-' + month + '-' + day;
+    str += ' ' + hour + ':' + min;
+    return str;
+};
 Task.prototype.modal = function(task, callback) {
   //define elements
   var shade = document.createElement('div'),
@@ -185,7 +198,7 @@ Task.prototype.modal = function(task, callback) {
   });
   new Trigger(submit,'click',function(){
     task.name = document.getElementById('taskName').value;
-    task.time = document.getElementById('taskTime').value;
+    task.time = task.toDateTime(new Date(document.getElementById('taskTime').value));
     task.desc = document.getElementById('taskDesc').value;
     shade.parentNode.removeChild(shade);
     callback.call();
@@ -193,7 +206,7 @@ Task.prototype.modal = function(task, callback) {
 
   //spawn modal
   document.children[0].appendChild(shade);
-}
+};
 
 //Trigger class definition================================================
 var Trigger = function(elem,eventType,handler) {
@@ -202,4 +215,4 @@ var Trigger = function(elem,eventType,handler) {
   } else if (elem.attachEvent) {
     elem.attachEvent('on' + eventType, handler);
   }
-}
+};
